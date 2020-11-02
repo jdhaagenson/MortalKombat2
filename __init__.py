@@ -1,3 +1,6 @@
 import pygame as pg 
+import main
 
-pg.init()
+
+if __name__ == '__main__':
+    game_loop()

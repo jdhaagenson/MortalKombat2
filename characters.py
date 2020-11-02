@@ -1,39 +1,85 @@
-#! python 3.6
-
+from controls import Controller
+from game_map import *
 from itertools import cycle
-
 import pygame as pg
+
 pg.init()
 
-spritesheets = {
-    'blood': "SNES_MK2_blood.png",
-    'jade': "SNES_MK2_jade.png",
-    'jax': "SNES_MK2_jax.png",
-    'kintaro': "SNES_MK2_kintaro.png",
-    'kitana': "SNES_MK2_kitana.png",
-    'kunglao': "SNES_MK2_kunglao.png",
-    'liukang': "SNES_MK2_liuKang.png",
-    'mileena': "SNES_MK2_mileena.png",
-    'reptile': "SNES_MK2_reptile.png",
-    'scorpion': "SNES_MK2_scorp.png",
-    'shang': "SNES_MK2_shang.png",
-    'subzero': "SNES_MK2_subz.png"
-}
+kitana_img =dict(
+    stand = ['kitana/SNES_MK2_kitana_stand1.png', 'kitana/SNES_MK2_kitana_stand2.png',
+             'kitana/SNES_MK2_kitana_stand3.png', 'kitana/SNES_MK2_kitana_stand4.png',
+             'kitana/SNES_MK2_kitana_stand5.png']
+          )
+mileena_img = ['./mileena/SNES_MK2_mileena.png'],
+liukang_img = ['./liukang/SNES_MK2_liukang.png'],
+kintaro_img = ['./kintaro/SNES_MK2_kintaro.png']
+# scorpion_img = [],
+# subzero_img = [],
+# reptile_img = [],
+# jade_img = [],
+# jax_img = []
 
 
-class Character:
-    def __init__(self, spritesheet):
-        self.spritesheet = spritesheet
-        self.images = [[],[],[]]
-        self.image = load_image(self.images[0][0])
+def collision_test(rect, tiles):
+    hit_list = []
+    for tile in tiles:
+        if rect.colliderect(tile):
+            hit_list.append(tile)
+    return hit_list
+
+class Character(pg.sprite.Sprite):
+    """
+    possible_status:
+    default (standing)
+    walking
+    up-punch
+    downpunch
+    forwardpunch
+    upkick
+    downkick
+    forwardkick
+    special
+    dizzy
+    hit
+    finished
+    winner
+    """
+    def __init__(self, images_dict:dict):
+        super().__init__(self)
+        self.action = 'stand'
+        self.images = images_dict
+        self.image = self.images[self.action]
         self.rect = self.image.get_rect()
-        self.position = self.rect.x 
-        self.facing = 'right'
-    def walk(self):
-        self.image = cycle(self.images[0][0])
-        if self.facing == 'left':
-            self.image 
+        self.x_pos = self.rect.x
+        self.index = 0
+        # self.controller = Controller()
+        self.movement = (0, 0)
+        self.collision_types = {
+            'top': False,
+            'bottom': False,
+            'right': False,
+            'left': False
+        }
+        self.health = 100
+        self.cycler = cycle(self.images[self.action])
+
     @staticmethod        
     def load_image(image):
         return pg.image.load(image).convert_alpha()
-    
+
+    # def move(self, rect, movement, tiles):
+    #     rect.x += movement[0]
+    #     hit_list = collision_test(self.rect, )
+
+    def update(self):
+        self.rect
+        self.index += 1
+    def next_image(self):
+        self.image = self.cycler.
+    def walk(self, forward=True):
+        if forward:
+            self.rect.x += 10
+            self.image = self.next_image()
+
+
+
